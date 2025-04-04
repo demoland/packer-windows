@@ -14,7 +14,8 @@ packer {
 
 variable "accelerator" {
   type    = string
-  default = "kvm"
+  default = "tcg"
+  descripton "TCG is used for macOS Hypervisor Framework, so use if building on macOS"
 }
 
 variable "autounattend" {
@@ -43,9 +44,14 @@ variable "iso_checksum" {
 }
 
 variable "iso_url" {
-  type    = string
-  default = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/22631.2428.231001-0608.23H2_NI_RELEASE_SVC_REFRESH_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+ type    = string
+ default = "./isos/WIN_11_23H2.iso"
 }
+
+#variable "iso_url" {
+#  type    = string
+#  default = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/22631.2428.231001-0608.23H2_NI_RELEASE_SVC_REFRESH_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+#}
 
 variable "memory_size" {
   type    = string
@@ -77,11 +83,11 @@ source "qemu" "win11_23h2" {
   iso_url          = "${var.iso_url}"
   memory           = "${var.memory_size}"
   net_device       = "virtio-net"
-  qemuargs         = [["-vga", "qxl"]]
+  #qemuargs         = [["-vga", "qxl"]]
   shutdown_command = "${var.shutdown_command}"
   winrm_insecure   = "true"
   winrm_password   = "vagrant"
-  winrm_timeout    = "30m"
+  winrm_timeout    = "180m"
   winrm_use_ssl    = "true"
   winrm_username   = "vagrant"
   output_directory = "output-${var.vm_name}"
